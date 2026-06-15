@@ -5,7 +5,7 @@ Changelog for package turtlebot3
 2.3.7 (2026-06-15)
 ------------------
 * Fixed an angle jump in IMU-based odometry when yaw wraps around ±π `#1141 <https://github.com/ROBOTIS-GIT/turtlebot3/issues/1141>`_ `#1142 <https://github.com/ROBOTIS-GIT/turtlebot3/pull/1142>`_
-* Contributors: Hyungyu Kim
+* Contributors: Hyungyu Kim, MikeHallettUK, Ashutosh-177
 
 2.3.6 (2025-12-15)
 ------------------
