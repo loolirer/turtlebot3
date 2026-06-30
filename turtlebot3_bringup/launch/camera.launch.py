@@ -79,6 +79,13 @@ def generate_launch_description() -> LaunchDescription:
         description='Camera image height'
     )
 
+    camera_info_url_name = 'camera_info_url'
+    camera_info_url_default = ''
+    camera_info_url_param = LaunchConfiguration(
+        camera_info_url_name,
+        default=camera_info_url_default,
+    )
+
     composable_nodes = [
         ComposableNode(
             package='camera_ros',
@@ -89,6 +96,7 @@ def generate_launch_description() -> LaunchDescription:
                 'width': width_param,
                 'height': height_param,
                 'format': format_param,
+                'camera_info_url': camera_info_url_param,
             }],
             extra_arguments=[{'use_intra_process_comms': True}],
         ),
@@ -113,11 +121,18 @@ def generate_launch_description() -> LaunchDescription:
         composable_node_descriptions=composable_nodes,
     )
 
+    camera_info_url_launch_arg = DeclareLaunchArgument(
+        camera_info_url_name,
+        default_value=camera_info_url_default,
+        description='URL to camera calibration info file',
+    )
+
     return LaunchDescription([
         camera_launch_arg,
         format_launch_arg,
         use_image_view_launch_arg,
         width_launch_arg,
         height_launch_arg,
+        camera_info_url_launch_arg,
         container,
     ])
