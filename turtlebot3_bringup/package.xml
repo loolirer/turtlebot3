@@ -21,6 +21,8 @@
   <exec_depend>rviz2</exec_depend>
   <exec_depend>turtlebot3_description</exec_depend>
   <exec_depend>turtlebot3_node</exec_depend>
+  <exec_depend>twist_mux</exec_depend>
+  <exec_depend>twist_mux_msgs</exec_depend>
   <export>
     <build_type>ament_cmake</build_type>
   </export>
