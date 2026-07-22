@@ -97,6 +97,7 @@ def generate_launch_description() -> LaunchDescription:
                 'height': height_param,
                 'format': format_param,
                 'camera_info_url': camera_info_url_param,
+                'FrameDurationLimits': [33333, 33333],
             }],
             extra_arguments=[{'use_intra_process_comms': True}],
         ),
