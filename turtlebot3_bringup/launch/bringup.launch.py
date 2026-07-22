@@ -62,7 +62,6 @@ def generate_launch_description():
             "geometry_msgs/msg/TwistStamped",
             "{}",
         ],
-        output="screen",
     )
 
     return LaunchDescription(
