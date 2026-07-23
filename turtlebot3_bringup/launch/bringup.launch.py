@@ -2,11 +2,12 @@ import os
 
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch.actions import ExecuteProcess
-from launch_ros.actions import Node
+from launch_ros.actions import Node, SetParameter
+from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
@@ -15,6 +16,8 @@ def generate_launch_description():
     namespace = LaunchConfiguration("namespace", default="")
     usb_port = LaunchConfiguration("usb_port", default="/dev/ttyACM0")
     use_sim_time = LaunchConfiguration("use_sim_time", default="false")
+    fps = LaunchConfiguration("fps", default="10.0")
+    jpeg_quality = LaunchConfiguration("jpeg_quality", default="80") # Rolls to 95 when unset
 
     robot = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -27,15 +30,30 @@ def generate_launch_description():
         }.items(),
     )
 
-    camera = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(bringup_dir, "launch", "camera.launch.py")
-        ),
-        launch_arguments={
-            "width": "640",
-            "height": "480",
-            "camera_info_url": "package://turtlebot3_bringup/config/camera_info.yaml",
-        }.items(),
+    camera = GroupAction(
+        actions=[
+            SetParameter(
+                name="camera.image_raw.compressed.jpeg_quality",
+                value=ParameterValue(jpeg_quality, value_type=int),
+            ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(
+                    os.path.join(bringup_dir, "launch", "camera.launch.py")
+                ),
+                launch_arguments={
+                    "width": "640",
+                    "height": "480",
+                    "camera_info_url": "package://turtlebot3_bringup/config/camera_info.yaml",
+                }.items(),
+            ),
+        ]
+    )
+
+    camera_throttle = Node(
+        package="topic_tools",
+        executable="throttle",
+        name="camera_throttle",
+        arguments=["messages", "/camera/image_raw/compressed", fps],
     )
 
     twist_mux_config = os.path.join(
@@ -69,18 +87,9 @@ def generate_launch_description():
             DeclareLaunchArgument(
                 "namespace", default_value="", description="Namespace for nodes"
             ),
-            DeclareLaunchArgument(
-                "usb_port",
-                default_value="/dev/ttyACM0",
-                description="USB port for OpenCR",
-            ),
-            DeclareLaunchArgument(
-                "use_sim_time",
-                default_value="false",
-                description="Use simulation clock",
-            ),
             robot,
             camera,
+            camera_throttle,
             watchdog,
             twist_mux,
         ]
