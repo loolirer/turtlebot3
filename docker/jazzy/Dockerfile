@@ -8,7 +8,6 @@ ENV COLCON_WS=/root/turtlebot3_ws
 # Install the required packages in a single layer and clean up afterwards
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    ros-${ROS_DISTRO}-desktop \
     python3-argcomplete \
     python3-colcon-common-extensions \
     libboost-system-dev \
