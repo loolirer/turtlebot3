@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CycloneDDS xmlns="https://cdds.io/config">
+  <Domain Id="any">
+    <General>
+      <Interfaces>
+        <NetworkInterface name="${DDS_IFACE}"/>
+      </Interfaces>
+      <AllowMulticast>spdp</AllowMulticast>
+      <MaxMessageSize>1400B</MaxMessageSize>
+    </General>
+    <Internal>
+      <SocketReceiveBufferSize min="1MB" max="16MB"/>
+    </Internal>
+  </Domain>
+</CycloneDDS>

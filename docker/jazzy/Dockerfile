@@ -30,6 +30,9 @@ RUN apt-get update && \
     ros-${ROS_DISTRO}-coin-d4-driver \
     ros-${ROS_DISTRO}-camera-ros \
     ros-${ROS_DISTRO}-urdf \
+    ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
+    ros-${ROS_DISTRO}-compressed-image-transport \
+    ros-${ROS_DISTRO}-topic-tools \
     && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
