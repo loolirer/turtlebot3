@@ -6,7 +6,10 @@ services:
       context: ../..
       dockerfile: docker/jazzy/Dockerfile
     tty: true
-    restart: unless-stopped
+    restart: always
+    init: true
+    stop_signal: SIGINT
+    stop_grace_period: 20s
     cap_add:
       - SYS_NICE
     ulimits:
@@ -30,4 +33,7 @@ services:
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
       - ../../:/root/turtlebot3_ws/src/turtlebot3
     privileged: true
-    command: bash
+    command: >
+      bash -c "source /opt/ros/jazzy/setup.bash &&
+               source /root/turtlebot3_ws/install/setup.bash &&
+               exec ros2 launch turtlebot3_bringup bringup.launch.py"
