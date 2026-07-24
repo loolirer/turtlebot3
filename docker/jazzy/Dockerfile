@@ -33,6 +33,7 @@ RUN apt-get update && \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp \
     ros-${ROS_DISTRO}-compressed-image-transport \
     ros-${ROS_DISTRO}-topic-tools \
+    ros-${ROS_DISTRO}-twist-mux \
     && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && \
