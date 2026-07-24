@@ -54,16 +54,6 @@ RUN apt-get update && \
     libgstreamer-plugins-base1.0-dev \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR ${COLCON_WS}
-
-RUN mkdir -p ${COLCON_WS}/src && \
-    cd ${COLCON_WS}/src && \
-    git clone -b jazzy https://github.com/ROBOTIS-GIT/turtlebot3.git
-
-RUN bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && \
-    cd ${COLCON_WS} && \
-    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release"
-
 RUN python3 -m pip config set global.break-system-packages true
 RUN pip3 install meson
 
@@ -73,6 +63,13 @@ RUN git clone -b v0.5.2 --depth 1 https://github.com/raspberrypi/libcamera.git &
     meson setup build --buildtype=release -Dpipelines=rpi/vc4,rpi/pisp -Dipas=rpi/vc4,rpi/pisp -Dv4l2=true -Dgstreamer=enabled -Dtest=false -Dlc-compliance=disabled -Dcam=disabled -Dqcam=disabled -Ddocumentation=disabled -Dpycamera=enabled && \
     ninja -C build install && \
     ldconfig
+
+WORKDIR ${COLCON_WS}
+RUN mkdir -p ${COLCON_WS}/src
+COPY . ${COLCON_WS}/src/turtlebot3
+RUN bash -c "source /opt/ros/${ROS_DISTRO}/setup.bash && \
+    cd ${COLCON_WS} && \
+    colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release"
 
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc && \
     echo "source ${COLCON_WS}/install/setup.bash" >> ~/.bashrc && \

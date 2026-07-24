@@ -3,8 +3,8 @@ services:
     container_name: turtlebot3
     image: robotis/turtlebot3:jazzy-latest
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../..
+      dockerfile: docker/jazzy/Dockerfile
     tty: true
     restart: unless-stopped
     cap_add:
@@ -21,7 +21,7 @@ services:
      - LDS_MODEL=LDS-02
      - ROS_DOMAIN_ID=30
      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
-     - CYCLONEDDS_URI=file:///root/turtlebot3_ws/src/docker/cyclonedds.xml
+     - CYCLONEDDS_URI=file:///root/turtlebot3_ws/src/turtlebot3/docker/jazzy/cyclonedds.xml
      - DDS_IFACE=${DDS_IFACE:-wlan0}
     volumes:
       - /dev:/dev
